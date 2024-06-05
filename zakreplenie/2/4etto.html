@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Интерактивный рисунок</title>
+<style>
+  canvas {
+    border: 1px solid black;
+  }
+</style>
+</head>
+<body>
+
+<canvas id="drawingCanvas" width="800" height="600"></canvas>
+<label for="lineWidth">Толщина линии:</label>
+<input type="range" id="lineWidth" min="1" max="10" value="1">
+<label for="lineColor">Цвет линии:</label>
+<input type="color" id="lineColor">
+
+<script>
+  const canvas = document.getElementById('drawingCanvas');
+  const ctx = canvas.getContext('2d');
+  let drawing = false;
+
+  canvas.addEventListener('mousedown', startDrawing);
+  canvas.addEventListener('mousemove', draw);
+  canvas.addEventListener('mouseup', stopDrawing);
+  canvas.addEventListener('mouseout', stopDrawing);
+
+  document.getElementById('lineWidth').addEventListener('input', setLineWidth);
+  document.getElementById('lineColor').addEventListener('input', setLineColor);
+
+  function startDrawing(e) {
+    drawing = true;
+    draw(e);
+  }
+
+  function draw(e) {
+    if (!drawing) return;
+    ctx.lineWidth = document.getElementById('lineWidth').value;
+    ctx.strokeStyle = document.getElementById('lineColor').value;
+    ctx.lineTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+  }
+
+  function stopDrawing() {
+    drawing = false;
+    ctx.beginPath();
+  }
+
+  function setLineWidth() {
+    ctx.lineWidth = this.value;
+  }
+
+  function setLineColor() {
+    ctx.strokeStyle = this.value;
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Падающие снежинки</title>
+<style>
+  canvas {
+    border: 1px solid black;
+    background: #000;
+  }
+</style>
+</head>
+<body>
+<canvas id="snow" width="1920" height="1080"></canvas>
+<script>
+  const canvas = document.getElementById('snow');
+  const ctx = canvas.getContext('2d');
+
+  const snow = [];
+
+  function createSnow() {
+    const x = Math.random() * canvas.width;
+    const y = -10;
+    snow.push({ x, y });
+  }
+
+  function drawSnow() {
+    ctx.fillStyle = 'white';
+    snow.forEach(snow => {
+      ctx.beginPath();
+      ctx.arc(snow.x, snow.y, 3, 0, Math.PI * 2);
+      ctx.fill();
+    });
+  }
+
+  function updateSnow() {
+    for (let i = 0; i < snow.length; i++) {
+      snow[i].y += 2;
+      if (snow[i].y > canvas.height) {
+        snow.splice(i, 1);
+        i--;
+      }
+    }
+  }
+
+  function loop() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawSnow();
+    updateSnow();
+    requestAnimationFrame(loop);
+  }
+
+  setInterval(createSnow, 300);
+  loop();
+</script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Снежинка Коха</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="kochCanvas" width="600" height="600"></canvas>
+    <button onclick="increaseDepth()">Увеличить глубину</button>
+    <script>
+        var canvas = document.getElementById('kochCanvas');
+        var ctx = canvas.getContext('2d');
+        var depth = 0;
+
+        function drawKochCurve(startX, startY, endX, endY, depth) {
+            if (depth === 0) {
+                ctx.moveTo(startX, startY);
+                ctx.lineTo(endX, endY);
+                ctx.stroke();
+            } else {
+                var deltaX = endX - startX;
+                var deltaY = endY - startY;
+                var dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY) / 3;
+                var angle = Math.atan2(deltaY, deltaX);
+                var p1X = startX + deltaX / 3;
+                var p1Y = startY + deltaY / 3;
+                var p2X = p1X + Math.cos(angle - Math.PI / 3) * dist;
+                var p2Y = p1Y + Math.sin(angle - Math.PI / 3) * dist;
+                var p3X = startX + deltaX * 2 / 3;
+                var p3Y = startY + deltaY * 2 / 3;
+                drawKochCurve(startX, startY, p1X, p1Y, depth - 1);
+                drawKochCurve(p1X, p1Y, p2X, p2Y, depth - 1);
+                drawKochCurve(p2X, p2Y, p3X, p3Y, depth - 1);
+                drawKochCurve(p3X, p3Y, endX, endY, depth - 1);
+            }
+        }
+
+        function drawSnowflake() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.beginPath();
+            drawKochCurve(150, 300, 450, 300, depth);
+            drawKochCurve(450, 300, 300, 50, depth);
+            drawKochCurve(300, 50, 150, 300, depth);
+            ctx.closePath();
+        }
+
+        function increaseDepth() {
+            depth++;
+            drawSnowflake();
+        }
+
+        drawSnowflake();
+    </script>
+</body>
+</html>

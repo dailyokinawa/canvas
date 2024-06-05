@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+.clock {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  border: 5px solid black;
+  border-radius: 50%;
+}
+
+.hand {
+  position: absolute;
+  bottom: 50%;
+  left: 50%;
+  width: 1px;
+  height: 40%;
+  background: black;
+  transform-origin: bottom;
+  transform: translateX(-50%);
+}
+
+#hour {
+  height: 30%;
+}
+
+#minute {
+  height: 40%;
+  background: red;
+}
+
+#second {
+  height: 45%;
+  background: green;
+}
+</style>
+</head>
+<body>
+
+<div class="clock">
+  <div id="hour" class="hand"></div>
+  <div id="minute" class="hand"></div>
+  <div id="second" class="hand"></div>
+</div>
+
+<script>
+function updateClock() {
+  var now = new Date();
+  var second = now.getSeconds();
+  var minute = now.getMinutes();
+  var hour = now.getHours();
+
+  var secondAngle = second * 6;
+  var minuteAngle = minute * 6 + second * 0.1;
+  var hourAngle = hour * 30 + minute * 0.5;
+
+  document.getElementById('second').style.transform = 'translateX(-50%) rotate(' + secondAngle + 'deg)';
+  document.getElementById('minute').style.transform = 'translateX(-50%) rotate(' + minuteAngle + 'deg)';
+  document.getElementById('hour').style.transform = 'translateX(-50%) rotate(' + hourAngle + 'deg)';
+}
+
+setInterval(updateClock, 1000);
+updateClock();
+</script>
+
+</body>
+</html>
